@@ -1,0 +1,9 @@
+version: '3'  # version of compose format 
+
+services:
+  file-upload-app:
+    build: ./file-upload-app
+    volumes:
+      - /tmp/FILE_UPLOAD_DIR/:/tmp/FILE_UPLOAD_DIR/ # mount point
+    ports:
+      - 8080:8080  # host:container
