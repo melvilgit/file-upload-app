@@ -15,12 +15,13 @@
      the latter insertion ,only File X will be  stored in the DISK .
      If we have to retrieve File Z ,which is not in disk , We query the sqliteDB 
      for the md5 of File Z, Again queries the db  with that md5 to retrived File X .
-     Then sends File X by just changing the name. ```
+     Then sends File X by just changing the name. 
+     ```
      
      
      To run ** 
               - git clone https://github.com/melvilgit/file-upload-app.git 
               - cd file-upload-app
               - docker-compose build
-              - docker-compose  up  
+              - docker-compose  up   **
      
