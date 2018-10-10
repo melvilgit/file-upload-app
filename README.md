@@ -1,6 +1,6 @@
 # file-upload-app
 ##file-upload-app written in python
-``` This is a python flask app which can upload /download and view files .
+This is a python flask app which can upload /download and view files .
     All the file uploaded will be stored in sqlite DB with filename and file md5 hash
     If a different file with same content is uploaded again , then then existing file content will be reused 
     by mapping then the new filename to old md5
@@ -16,7 +16,7 @@
      If we have to retrieve File Z ,which is not in disk , We query the sqliteDB 
      for the md5 of File Z, Again queries the db  with that md5 to retrived File X .
      Then sends File X by just changing the name. 
-     ```
+     
      
      
      To run ** 
@@ -24,4 +24,9 @@
               - cd file-upload-app
               - docker-compose build
               - docker-compose  up   **
-     
+              
+     How to Test ?
+           download file (GET)    - curl http://<server>:8080/file/uploads/<filename>
+           upload   file (POST)   - curl -i -X POST -H "Content-Type: multipart/form-data"  -F "file=@<filename>" http://server:8080/file/uploads
+           delete   file (DELETE) -  curl -X DELETE http://<server>:8080/file/uploads/<filename>
+      
