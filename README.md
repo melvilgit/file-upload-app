@@ -1,9 +1,9 @@
 # file-upload-app
 ##file-upload-app written in python
-This is a python flask app which can upload /download and view files .
-    All the file uploaded will be stored in sqlite DB with filename and file md5 hash
+This is a python flask app which can upload /download and delete files .
+    All the file uploaded will be stored in  the disk with filename and file md5 hash stored in sqlite DB.
     If a different file with same content is uploaded again , then then existing file content will be reused 
-    by mapping then the new filename to old md5
+    by mapping then the new filename to old md5 in sqlite .
     
     File Name     |  Md5sum
     ------------- | -------------
