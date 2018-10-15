@@ -20,11 +20,14 @@ def delete_file(filename):
        Description : The filename
     """
 
-    if not fileUtilities.deletefromDB(filename):
+    actualFile = fileUtilities.getFileName(filename)
+    if not actualFile:
         abort(404)
     else:
-        filePath = UPLOAD_FOLDER + "/" + filename
-        os.path.exists(filePath) and os.remove(filePath)
+        fileUtilities.deletefromDB(filename)
+        if fileUtilities.safeDelete(actualFile):
+            filePath = UPLOAD_FOLDER + "/" + filename
+            os.path.exists(filePath) and os.remove(filePath)
         resp = jsonify(success=True)
         return resp
 
@@ -42,7 +45,7 @@ def download_file(filename):
     actualFilename = fileUtilities.getFileName(filename)
     if not actualFilename:
         abort(404)
-    return send_from_directory(directory=UPLOAD_FOLDER, filename=actualFilename,attachment_filename=filename)
+    return send_from_directory(directory=UPLOAD_FOLDER, filename=actualFilename, attachment_filename=filename)
 
 
 @fileApi.route('/uploads', methods=['POST'])

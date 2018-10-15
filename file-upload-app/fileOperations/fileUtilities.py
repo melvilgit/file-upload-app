@@ -3,9 +3,7 @@ import os
 
 from .models import File
 from werkzeug.utils import secure_filename
-
 from database import db
-
 from .common import *
 
 
@@ -21,8 +19,10 @@ class fileUtilities:
         self.fileObj = fileObj
         self.existingFileMd5 = fileUtilities.checkMd5Exist(
             self.fileMd5)  # Check if md5 exists in sqlite , True/False
-        print self.existingFileMd5
-        self.File = File(self.fileMd5, self.filename)  # The File Object Modal
+        if self.existingFileMd5:
+            self.File = File(self.fileMd5, self.filename, self.existingFileMd5)
+        else:
+            self.File = File(self.fileMd5, self.filename, self.filename)  # The File Object Modal
 
     def savetoDB(self):
 
@@ -50,12 +50,21 @@ class fileUtilities:
             Parameters
               md5 - md5sum
             Return
-              True/False
+              filename/None
          """
-        exists = db.session.query(
-            db.session.query(File).filter_by(md5=md5).exists()
-        ).scalar()
-        return exists
+        try:
+            filename = db.session.query(File).filter(File.md5 == md5).first().name
+            return filename
+        except Exception as e:
+            print e
+            return None
+
+    @staticmethod
+    def getMd5(filename):
+        """Function to retreive md5 of a file"""
+        md5 = db.session.query(File).filter(
+            File.name == filename).one().md5  # Gets md5 of the file requested from sqlite
+        return md5
 
     @staticmethod
     def deletefromDB(filename):
@@ -68,9 +77,10 @@ class fileUtilities:
         try:
             fileExists = db.session.query(File).filter(File.name == filename).one()
             if fileExists:
+                md5 = fileUtilities.getMd5(filename)
                 File.query.filter(File.name == filename).delete()
                 db.session.commit()
-            return True
+            return md5
 
         except Exception as e:
             print e
@@ -85,10 +95,25 @@ class fileUtilities:
              Filename - It can be the either the same input filename or any other filename with the md5  of requested filename
         """
         try:
-            md5 = db.session.query(File).filter(
-                File.name == filename).one().md5  # Gets md5 of the file requested from sqlite
             filename = db.session.query(File).filter(
-                File.md5 == md5).first().name  # Get the filename of the file with the md5 from sqlite
+                File.name == filename).first().map  # Get the filename of the file with the md5 from sqlite
             return filename
         except Exception as e:
             return None
+
+    @staticmethod
+    def safeDelete(filename):
+
+        """Function to check if a file can be safely deleted, Similar to unlink system call.
+           Check if any other file is using the content , if no file is pointing, it is safe to delete
+           Parameters
+             filename - name of file
+           Return
+              True/False
+           """
+
+        exists = db.session.query(
+            db.session.query(File).filter_by(name=filename).exists()
+        ).scalar()
+        return not exists
+
