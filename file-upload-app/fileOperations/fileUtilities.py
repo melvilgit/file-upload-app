@@ -99,6 +99,7 @@ class fileUtilities:
                 File.name == filename).first().map  # Get the filename of the file with the md5 from sqlite
             return filename
         except Exception as e:
+            print e
             return None
 
     @staticmethod
@@ -112,8 +113,13 @@ class fileUtilities:
               True/False
            """
 
+
         exists = db.session.query(
-            db.session.query(File).filter_by(name=filename).exists()
+            db.session.query(File).filter_by(map=filename).exists()
         ).scalar()
-        return not exists
+
+        if exists:
+            return False
+        else:
+            return  True
 
