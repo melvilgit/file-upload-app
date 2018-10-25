@@ -30,3 +30,4 @@ This is a python flask app which can upload /download and delete files .
            upload   file (POST)   - curl -i -X POST -H "Content-Type: multipart/form-data"  -F "file=@<filename>" http://server:8080/file/uploads
            delete   file (DELETE) -  curl -X DELETE http://<server>:8080/file/uploads/<filename>
       
+            ##sample Test cases #### - python test.py
