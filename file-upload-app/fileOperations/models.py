@@ -3,7 +3,7 @@ from sqlalchemy.dialects.mysql import INTEGER
 
 class File(db.Model):
     """Modal to Store a File metadata """
-    __tablename__ = 'filemetadatas'
+    __tablename__ = 'filemetadata'
     name = db.Column(db.String(100), primary_key=True)
     md5 = db.Column(db.String(100))
     map = db.Column(db.String(100))

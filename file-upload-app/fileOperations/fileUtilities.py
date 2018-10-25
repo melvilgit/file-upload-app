@@ -15,7 +15,9 @@ class fileUtilities:
         self.fileMd5 = hashlib.md5(fileObj.read()).hexdigest()  # read() will moves the file handle to the file start
         fileObj.stream.seek(
             0)  # Moves the file handle to start so that uploaded file is never empty .
+
         self.filename = secure_filename(fileObj.filename)
+
         self.fileObj = fileObj
         self.existingFileMd5 = fileUtilities.checkMd5Exist(
             self.fileMd5)  # Check if md5 exists in sqlite , True/False

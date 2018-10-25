@@ -24,12 +24,14 @@ def delete_file(filename):
     if not actualFile:
         abort(404)
     else:
-        fileUtilities.deletefromDB(filename)
-        if fileUtilities.safeDelete(actualFile):
-            filePath = UPLOAD_FOLDER + "/" + filename
-            os.path.exists(filePath) and os.remove(filePath)
-        resp = jsonify(success=True)
-        return resp
+      fileUtilities.deletefromDB(filename)
+      fileToDelete = fileUtilities.safeDelete(actualFile)
+
+      if fileToDelete:
+         filePath = UPLOAD_FOLDER + "/" + actualFile
+         os.path.exists(filePath) and os.remove(filePath)
+      resp = jsonify(success=True)
+      return resp
 
 
 @fileApi.route('/uploads/<filename>', methods=['GET'])
@@ -66,5 +68,10 @@ def upload_file():
         fileObj = request.files['file']
         this = fileUtilities(fileObj)
         this.savetoDB()
+
         this.uploadFile()
         return redirect(url_for('routes.download_file', filename=this.filename))
+
+@fileApi.route('/ping', methods=['GET'])
+def index():
+  return "pong"
