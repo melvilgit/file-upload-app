@@ -8,7 +8,7 @@ from StringIO import StringIO
 from fileOperations.common import *
 from flask import Flask
 from fileOperations.fileUtilities import fileUtilities
-from fileOperations.models import File
+from fileOperations.models import File as ashitha
 
 filename = 'hello_world.txt'
 dupfilename = 'hello_world_tmp.txt'
